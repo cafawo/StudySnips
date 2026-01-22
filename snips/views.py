@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import SnipForm
-from .models import Snip
+from .models import Classroom, Snip
 import random
 # API specific imports
 from django.http import JsonResponse
@@ -73,3 +73,37 @@ def api_chart_data(request):
 # Chart
 def chart_page(request):
     return render(request, 'snips/chart.html')
+
+
+def leaderboard(request):
+    classroom_id = request.GET.get('classroom') or request.GET.get('classroom_id')
+    leaderboard_rows = []
+    error_message = None
+
+    if not classroom_id:
+        error_message = 'Please provide a classroom id using ?classroom=...'
+    else:
+        classroom_exists = Classroom.objects.filter(classroom_id=classroom_id).exists()
+        if not classroom_exists:
+            error_message = 'Classroom not found.'
+        else:
+            leaderboard_rows = list(
+                Snip.objects.filter(
+                    snipsheet__classroom__classroom_id=classroom_id,
+                    student_id__isnull=False,
+                )
+                .exclude(student_id='')
+                .values('student_id')
+                .annotate(snip_count=Count('id'))
+                .order_by('-snip_count', 'student_id')[:10]
+            )
+
+    for idx, row in enumerate(leaderboard_rows, start=1):
+        row['place'] = str(idx)
+
+    context = {
+        'classroom_id': classroom_id,
+        'leaderboard_rows': leaderboard_rows,
+        'error_message': error_message,
+    }
+    return render(request, 'snips/leaderboard.html', context)
