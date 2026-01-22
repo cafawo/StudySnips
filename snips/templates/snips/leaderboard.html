@@ -21,6 +21,11 @@
             width: 100%;
             max-width: 520px;
         }
+        .leaderboard-card {
+            border: 1px solid #e9ecef;
+            border-radius: 0.75rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        }
         .table thead th {
             border-bottom: 2px solid #dee2e6;
         }
@@ -29,39 +34,45 @@
 <body>
 <div class="main-container">
     <div class="content-container">
-        <h1 class="text-center">Leaderboard</h1>
+        <h1 class="text-center">🏆 Leaderboard 🏆</h1>
         {% if classroom_id %}
-            <p class="text-center text-muted mb-4">Classroom: {{ classroom_id }}</p>
+            <p class="text-center text-muted mb-2">Classroom: {{ classroom_id }}</p>
         {% endif %}
-
         {% if error_message %}
             <div class="alert alert-warning" role="alert">
                 {{ error_message }}
             </div>
         {% else %}
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">Place</th>
-                            <th scope="col">Snips</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for row in leaderboard_rows %}
-                            <tr>
-                                <td>{{ row.place }}</td>
-                                <td>{{ row.snip_count }}</td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td colspan="2" class="text-center text-muted">No snips yet.</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="card leaderboard-card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Place</th>
+                                    <th scope="col">Snips</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in leaderboard_rows %}
+                                    <tr>
+                                        <td>{{ row.place }}</td>
+                                        <td>{{ row.snip_count }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="2" class="text-center text-muted py-4">No snips yet.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         {% endif %}
+        <div class="text-center mt-4">
+            <a class="btn btn-primary" href="/">Claim a new Snip</a>
+        </div>
     </div>
 </div>
 </body>
