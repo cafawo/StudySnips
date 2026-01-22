@@ -4,6 +4,7 @@ from .models import Classroom, Snip
 import random
 # API specific imports
 from django.http import JsonResponse
+from django.utils.html import format_html
 from django.db.models import Count, DateField
 from django.db.models.functions import TruncDate
 
@@ -32,6 +33,7 @@ def home(request):
             student_id = form.cleaned_data['student_id']
             try:
                 snip = Snip.objects.get(snip_id=snip_id)
+                leaderboard_url = f'/leaderboard/?classroom={snip.snipsheet.classroom.classroom_id}'
                 snip.claim_attempts += 1
                 if snip.student_id:
                     message = 'Nice try, but this Snip has already been claimed. 😑'
@@ -54,7 +56,11 @@ def home(request):
         # Initialize the form with GET data if present, or with no data if not
         form = SnipForm(initial=initial_data)
 
-    context = {'form': form, 'message': message}
+    context = {
+        'form': form,
+        'message': message,
+        'leaderboard_url': leaderboard_url,
+    }
     return render(request, 'snips/home.html', context)
 
 # API

@@ -52,7 +52,12 @@
             <button type="submit" class="btn btn-primary btn-block">Claim</button>
         </form>
         {% if message %}
-            <p class="alert alert-success mt-3"><strong>{{ message }}</strong></p>
+            <div class="alert alert-success mt-3">
+                <strong>{{ message }}</strong>
+                {% if leaderboard_url %}
+                    <div class="mt-2">Check out the leaderboard <a href="{{ leaderboard_url }}">HERE</a>.</div>
+                {% endif %}
+            </div>
         {% endif %}
     </div>
 </div>
