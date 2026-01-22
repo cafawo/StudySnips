@@ -20,6 +20,7 @@ def ordinal_format(n):
 def home(request):
     message = None  # Initialize message variable
     initial_data = {}
+    leaderboard_url = None
 
     # Check if there's a snip_id in the GET request and use it to pre-populate the form
     snip_id = request.GET.get('snip_id')
