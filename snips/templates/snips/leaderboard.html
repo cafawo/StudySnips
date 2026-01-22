@@ -35,8 +35,8 @@
 <div class="main-container">
     <div class="content-container">
         <h1 class="text-center">🏆 Leaderboard 🏆</h1>
-        {% if classroom_id %}
-            <p class="text-center text-muted mb-2">Classroom: {{ classroom_id }}</p>
+        {% if classroom %}
+            <p class="text-center text-muted mb-2">Classroom: {{ classroom.name }} ({{ classroom.classroom_id }})</p>
         {% endif %}
         {% if error_message %}
             <div class="alert alert-warning" role="alert">

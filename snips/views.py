@@ -87,16 +87,17 @@ def leaderboard(request):
     leaderboard_rows = []
     error_message = None
 
+    classroom = None
     if not classroom_id:
         error_message = 'Please provide a classroom id using ?classroom=...'
     else:
-        classroom_exists = Classroom.objects.filter(classroom_id=classroom_id).exists()
-        if not classroom_exists:
+        classroom = Classroom.objects.filter(classroom_id=classroom_id).first()
+        if not classroom:
             error_message = 'Classroom not found.'
         else:
             leaderboard_rows = list(
                 Snip.objects.filter(
-                    snipsheet__classroom__classroom_id=classroom_id,
+                    snipsheet__classroom=classroom,
                     student_id__isnull=False,
                 )
                 .exclude(student_id='')
@@ -110,6 +111,7 @@ def leaderboard(request):
 
     context = {
         'classroom_id': classroom_id,
+        'classroom': classroom,
         'leaderboard_rows': leaderboard_rows,
         'error_message': error_message,
     }
